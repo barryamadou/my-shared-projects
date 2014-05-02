@@ -1,0 +1,223 @@
+ {
+ "sejour": {
+ 		"_timestamp" : { "enabled" : true, "index" : "not_analyzed" },
+ 		
+						"properties": {
+							"dateDepart": {
+								"type": "date"
+							},
+							"dateRetour": {
+								"type": "date"
+							},
+							"calendrierId": {
+								"type": "long"
+							},
+							"rank": {
+								"type": "long"
+							},
+							"riskVendeur": {
+								"type": "integer"
+							},
+							"villeLogementId": {
+								"type": "long"
+							},
+							"risqueAerien": {
+								"type": "integer"
+							},
+							"noteGlobale": {
+								"type": "integer"
+							},
+							"offreCompleteId": {
+								"type": "long"
+							},
+							"produitId": {
+								"type": "long"
+							},
+							"formules": {
+								"type": "string",
+								"index": "no"
+							},
+							"codeMarque": {
+								"type": "string",
+								"index" : "not_analyzed"
+							},
+							"isDispo": {
+								"type": "string"
+							},
+							"isPromovel": {
+								"type": "boolean"
+							},
+							"coupDeCoeur": {
+								"type": "boolean"
+							},
+							"stopAffaire": {
+								"type": "boolean"
+							},
+							"duree": {
+								"properties": {
+									"nombreJours": {
+										"type": "integer"
+									},
+									"nombreNuits": {
+										"type": "integer"
+									},
+									"typeDuree": {
+										"type": "string",
+										"index": "no"
+									}
+								}
+							},
+							"pension": {
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"libelle": {
+										"type": "string",
+										"index": "no"
+									}
+								}
+							},
+							"tarif": {
+								"properties": {
+									"prixMinTTC": {
+										"type": "integer"
+									},
+									"dateMAJPrix": {
+										"type": "date"
+									}
+								}
+							},
+							"fournisseur": {
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"libelle": {
+										"type": "string",
+										"index": "no"
+									}
+								}
+							},
+							"theme": {
+								"properties": {
+									"id": {
+										"type": "integer"
+									},
+									"libelle": {
+										"type": "string",
+										"index": "no"
+									}
+								}
+							},
+							"infosGeographiques": {
+								"properties": {
+									"villeDepart": {
+										"properties": {
+											"id": {
+												"type": "integer"
+											},
+											"libelle": {
+												"type": "string",
+												"index" : "not_analyzed"
+											}
+										}
+									},
+									"villeArrivee": {
+										"properties": {
+											"id": {
+												"type": "integer"
+											},
+											"libelle": {
+												"type": "string",
+												"index" : "not_analyzed"
+											}
+										}
+									},
+									"zoneTouristique": {
+										"properties": {
+											"id": {
+												"type": "integer",
+												"index": "no"
+											},
+											"libelle": {
+												"type": "string",
+												"index": "no"
+											},
+											"zone": {
+												"properties": {
+													"id": {
+														"type": "integer",
+														"index": "no"
+													},
+													"libelle": {
+														"type": "string",
+														"index": "no"
+													}                            
+												}   
+											}                         
+										}
+									},
+									"paysArrivee": {
+										"properties": {
+											"libelle": {
+												"type": "string",
+												"index" : "not_analyzed"
+											}
+										}
+									}
+								}
+							},
+							"logement": {
+								"properties": {
+									"logementId": {
+										"type": "string",
+										"index" : "not_analyzed"
+									},
+									"logementBbqId": {
+										"type": "string",
+										"index" : "not_analyzed"
+									},
+									"nom": {
+										"type": "string",
+										"index": "no"
+									},
+									"categorie": {
+										"properties": {
+											"niveau": {
+												"type": "integer"
+											},
+											"libelle": {
+												"type": "string",
+												"index" : "not_analyzed"
+											}
+										}
+									},
+									"ville": {
+										"properties": {
+											"nom": {
+												"type": "string",
+												"index" : "not_analyzed"
+											},
+											"code": {
+												"type": "string",
+												"index" : "not_analyzed"
+											},
+											"codeIATAPays": {
+												"type": "string",
+												"index" : "not_analyzed"
+											}
+										}
+									},
+									"lonlat": {
+										"type": "double"
+									},
+									"coordonnees": {
+										"type": "geo_point",
+										"index": "no"
+									}
+								}
+							}
+						}
+		}
+}

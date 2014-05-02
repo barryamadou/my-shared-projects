@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+ 	   http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd	
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+	
+	
+	<bean id="slqQueryContent" class="org.apache.commons.io.IOUtils"
+		factory-method="toString">
+		<constructor-arg value="classpath:/META-INF/camel/sqlQuery.sql"
+			type="java.io.InputStream" />
+	</bean>
+	
+		<bean id="sqlQueryCountContent" class="org.apache.commons.io.IOUtils"
+		factory-method="toString">
+		<constructor-arg value="classpath:/META-INF/camel/sqlQueryCount.sql"
+			type="java.io.InputStream" />
+	</bean>
+	
+	<bean id="esAdminManager"
+		class="com.karavel.tutorial.indexation.elasticsearch.EsAdminManager">
+		<property name="esClientNode" ref="esClientNode" />
+		<property name="dataSource" ref="virageFO.dataSource" />
+		<property name="esVirageMetricsDataSource" ref="es.virage.metrics.dataSource" />
+		<property name="slqQuery" ref="slqQueryContent" />
+		<property name="transportClient"  ref="transportClient" />
+		<property name="jsonIndexeMapping" ref="jsonIndexeMapping" />
+		
+	</bean>
+
+	<bean id="transportClient" class="org.springframework.beans.factory.config.PropertyPathFactoryBean">
+   		<property name="targetBeanName" value="esClientNode"/>
+   		<property name="propertyPath" value="client"/>
+ 	</bean>
+
+
+	<bean id="esClientNode" init-method="init" destroy-method="destroy"
+		class="com.karavel.tutorial.indexation.elasticsearch.EsClientNode">
+<!-- 		
+ 		<property name="elasticSearchNodes" value="estest01" />
+		<property name="elasticSearchNodes" value="estest01, estest02, estest03" />
+ 		
+ -->	
+ 		<property name="elasticSearchNodes" value="${elasticSearchNodes.names}" />
+		<property name="elasticsearchclusterName" value="${es.clusterName}" />
+		<property name="elasticSearchNodesPort" value="${es.port}" />
+	</bean>
+	
+	
+	
+
+	<bean id="dbSharder"
+		class="com.karavel.tutorial.indexation.db.DbSharder">
+		<property name="shardSlqQuery" ref="shardSlqQuery" />
+		<property name="sqlQueryCountContent" ref="sqlQueryCountContent" />
+		<property name="dataSource" ref="virageFO.dataSource" />
+		<property name="requestSenderAsynchro" ref="requestSenderAsynchro" />
+		<property name="esAdminManager" ref="esAdminManager" />
+ </bean>
+	
+	<bean id="shardSlqQuery" class="org.apache.commons.io.IOUtils"
+		factory-method="toString">
+		<constructor-arg value="classpath:/META-INF/camel/shardSlqQuery.sql"
+			type="java.io.InputStream" />
+	</bean>
+	
+	<bean id="jsonIndexeMapping" class="org.apache.commons.io.IOUtils"
+		factory-method="toString">
+			<constructor-arg value="classpath:META-INF/camel/sejour.json"
+						type="java.io.InputStream" />
+	</bean>
+	
+	
+
+
+	<bean id="indexerMananager"
+		class="com.karavel.tutorial.indexation.IndexerMananager">
+		<property name="esAdminManager" ref="esAdminManager" />
+		<property name="dbSharder" ref="dbSharder" />
+		<property name="configProperties" ref="configProperties" />
+		<property name="mailSender" ref="theMailSender" />
+		
+ </bean>
+
+	
+</beans>

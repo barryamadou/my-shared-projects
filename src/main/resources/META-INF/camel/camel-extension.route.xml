@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+ 	   http://www.springframework.org/schema/context  	   
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd	
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util-3.0.xsd      
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<context:property-placeholder  location="classpath:elasticsearch.virage.river/config.properties"  />
+	<util:properties id="configProperties" location="classpath:elasticsearch.virage.river/config.properties" />
+
+
+	<!-- the camel context -->
+	<camelContext xmlns="http://camel.apache.org/schema/spring"
+		trace="true">
+		<template camelContextId="contextCamel" id="templateSender" />
+		<!--
+		<route id="indexerWorkQueue" trace="true"> 
+			<from uri="seda:indexerWorkQueue" /> 
+				<camel:threads executorServiceRef="executorsPool"> 
+					<bean ref="esAdminManager" 
+							beanType="com.karavel.tutorial.indexation.elasticsearch.EsAdminManager" 
+				method="createUser" /> 
+				</camel:threads> 
+		</route> 
+		 -->
+ 		<route id="indexerWorkQueue" trace="true">
+			<from uri="seda:indexerWorkQueue?concurrentConsumers=10" />
+			<bean ref="esAdminManager" method="indexDocs" />
+		</route>
+	</camelContext>
+
+	<bean id="executorsPool" class="java.util.concurrent.Executors"
+		factory-method="newFixedThreadPool">
+		<constructor-arg index="0" value="10" />
+	</bean>
+
+
+	<bean name="requestSenderSynchro"
+		class="com.karavel.front.send.request.strategy.impl.RequestSenderImpl"
+		autowire="byType">
+		<property name="delegate" ref="synchroRequestSenderDelegateImpl" />
+	</bean>
+
+	<!-- mode Synchrone -->
+	<bean name="synchroRequestSenderDelegateImpl"
+		class="com.karavel.front.send.request.strategy.impl.SynchroRequestSenderDelegateImpl">
+		<property name="producerTemplate" ref="templateSender" />
+	</bean>
+
+	<bean name="requestSenderAsynchro"
+		class="com.karavel.front.send.request.strategy.impl.RequestSenderImpl"
+		autowire="byType">
+		<property name="delegate" ref="asynchroRequestSenderDelegateImpl" />
+	</bean>
+
+	<!-- mode Asynchrone -->
+	<bean name="asynchroRequestSenderDelegateImpl"
+		class="com.karavel.front.send.request.strategy.impl.ASynchroRequestSenderDelegateImpl">
+		<property name="producerTemplate" ref="templateSender" />
+	</bean>
+
+
+</beans>

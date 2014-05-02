@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="ConsoleAppender"
+		class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+<!-- 			<param name="ConversionPattern" value="%d{dd/MM/yy-HH:mm:ss} - [%t][%-5p][%C] - %m%n" />
+			<param name="ConversionPattern" value="%d %5p [%t] (%F:%L) transactionId=%X{REQUEST_TRANSACTION_ID};operationName=%X{operationName} - %m%n" />
+ -->			<param name="ConversionPattern" value="%d %5p [%t] [%C.%M:%L]- %m%n" />
+		</layout>
+	</appender>
+	
+	
+	
+	<appender name="BATCH-KPI-FILE" class="org.apache.log4j.RollingFileAppender">
+	 <!--  ${catalina.base}/logs/-->
+		<param name="file" value="F:/helios/1MA2_Deploy/template.river.sample/logs/elasticsearch_virage_river_kpi.log" />
+		<param name="MaxFileSize" value="1000KB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%c{3}] %p  - %m%n" />
+		</layout>
+	</appender>
+	
+	<category name="com.karavel.tutorial.indexation.elasticsearch.EsAdminManager.KPI">
+		<priority value="INFO" />
+		<appender-ref ref="BATCH-KPI-FILE" />
+	</category>
+
+	<category name="net.sf.ehcache">
+		<priority value="ERROR" />
+	</category> 
+
+	<category name="org.apache.camel">
+		<priority value="ERROR" />
+	</category> 
+	<category name="org.springframework">
+		<priority value="ERROR" />
+	</category> 
+	
+	<category name="org.springframework.jdbc.core.JdbcTemplate">
+		<priority value="DEBUG" />
+	</category> 
+	
+	<category name="org.elasticsearch.common.logging">
+		<priority value="INFO" />
+	</category> 
+	
+	
+	
+	
+	
+	<category name="com.karavel.tutorial.indexation.elasticsearch.EsAdminManager">
+		<priority value="DEBUG" />
+	</category> 
+	
+	<category name="com.karavel.tutorial.indexation.elasticsearch.ResultSetExtractorDocIndexer">
+		<priority value="DEBUG" />
+	</category> 
+	
+	
+	<category name="com.karavel.tutorial.indexation.IndexerMananager">
+		<priority value="DEBUG" />
+	</category> 
+	
+	
+	<category name="org.apache.camel">
+		<priority value="ERROR" />
+	</category> 
+	
+	<category name="com.karavel.front.send.request.strategy.impl.RequestSenderImpl">
+		<priority value="INFO" />
+	</category> 
+	
+	<root>
+		<priority value="ERROR" />
+        <appender-ref ref="ConsoleAppender" />
+ 
+ </root>           
+
+</log4j:configuration>

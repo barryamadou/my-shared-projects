@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/jee	http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+	   http://www.springframework.org/schema/context  	   
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd	
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util-3.0.xsd      
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+         
+         
+	<jee:jndi-lookup id="virageFO.dataSource"
+		jndi-name="java:comp/env/jdbc/virageFO"
+		expected-type="javax.sql.DataSource" />
+    
+    <jee:jndi-lookup id="es.virage.metrics.dataSource"
+		jndi-name="java:comp/env/jdbc/es_virage_metrics"
+		expected-type="javax.sql.DataSource" />
+	
+         
+</beans>
